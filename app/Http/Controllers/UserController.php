@@ -9,6 +9,7 @@ class UserController extends Controller
 {
     public function index()
     {
+        // Jobsheet 3
         // tambah data user dengan Eloquent Model
         // $data = [
         //     'username' => 'customer-1',
@@ -18,12 +19,20 @@ class UserController extends Controller
         // ];
         // UserModel::insert($data);
 
-        $data = [
-            'nama' => 'Pelanggan Pertama',
-        ];
-        UserModel::where('username', 'customer-1')->update($data);
+        // $data = [
+        //     'nama' => 'Pelanggan Pertama',
+        // ];
+        // UserModel::where('username', 'customer-1')->update($data);
 
-        // coba akses model UserModel
+        // Jobsheet 4
+        $data = [
+            'level_id' => 2,
+            'username' => 'manager_tiga',
+            'nama' => 'Manager 3',
+            'password' => Hash::make('12345')
+        ];
+        UserModel::create($data);
+
         $user = UserModel::all();
         return view('user', ['data' => $user]);
     }
