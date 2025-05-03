@@ -50,6 +50,9 @@ Route::middleware(['auth'])->group(function () {
             // Ajax Delete
             Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
             Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
+            // Import Excel
+            Route::get('/import', [UserController::class, 'import']);
+            Route::post('/import_ajax', [UserController::class, 'import_ajax']);
         });
 
         Route::group(['prefix' => 'level'], function () {
@@ -70,6 +73,9 @@ Route::middleware(['auth'])->group(function () {
             // Ajax Delete
             Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']);
             Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);
+            // Import Excel
+            Route::get('/import', [LevelController::class, 'import']);
+            Route::post('/import_ajax', [LevelController::class, 'import_ajax']);
         });
     });
 
@@ -92,6 +98,9 @@ Route::middleware(['auth'])->group(function () {
             // Ajax Delete
             Route::get('/{id}/delete_ajax', [KategoriController::class, 'confirm_ajax']);
             Route::delete('/{id}/delete_ajax', [KategoriController::class, 'delete_ajax']);
+            // Import Excel
+            Route::get('/import', [KategoriController::class, 'import']);
+            Route::post('/import_ajax', [KategoriController::class, 'import_ajax']);
         });
     
         Route::group(['prefix' => 'supplier'], function () {
@@ -112,6 +121,9 @@ Route::middleware(['auth'])->group(function () {
             // Ajax Delete
             Route::get('/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax']);
             Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax']);
+            // Import Excel
+            Route::get('/import', [SupplierController::class, 'import']);
+            Route::post('/import_ajax', [SupplierController::class, 'import_ajax']);
         });
 
         Route::group(['prefix' => 'barang'], function () {
@@ -132,6 +144,9 @@ Route::middleware(['auth'])->group(function () {
             // Ajax Delete
             Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax']);
             Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax']);
+            // Import Excel
+            Route::get('/import', [BarangController::class, 'import']);
+            Route::post('/import_ajax', [BarangController::class, 'import_ajax']);
         });
     });
 });

@@ -8,6 +8,7 @@ use App\Models\LevelModel;
 use Monolog\Level;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class LevelController extends Controller
 {
@@ -221,6 +222,54 @@ class LevelController extends Controller
             }
         }
         return redirect('/');
+    }
+
+    public function import()
+    {
+        return view('level.import');
+    }
+
+    public function import_ajax(Request $request)
+    {
+        $rules = [
+            'file_level' => ['required', 'mimes:xlsx,xls', 'max:1024'],
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi Gagal',
+                'msgField' => $validator->errors(),
+            ]);
+        }
+
+        $file = $request->file('file_level');
+        $spreadsheet = IOFactory::load($file->getRealPath());
+        $sheet = $spreadsheet->getActiveSheet();
+        $rows = $sheet->toArray();
+
+        $insert = [];
+        $header = array_shift($rows); // Ambil header
+
+        foreach ($rows as $row) {
+            if (!empty($row[0])) {
+                $insert[] = [
+                    'level_kode' => $row[0],
+                    'level_nama' => $row[1],
+                ];
+            }
+        }
+
+        if (!empty($insert)) {
+            LevelModel::insertOrIgnore($insert);
+
+            return redirect('/level')->with('success', 'Data level berhasil diimport: ' . count($insert) . ' record');
+            
+        } else {
+            return redirect('/level')->with('error', 'Data level gagal diimport');
+        }
     }
 
     public function destroy(string $id)

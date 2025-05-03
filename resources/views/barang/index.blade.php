@@ -5,6 +5,7 @@
     <div class="card-header">
         <h3 class="card-title">{{ $page->title }}</h3>
         <div class="card-tools">
+            <button onclick="modalAction('{{ url('barang/import') }}')" class="btn btn-sm btn-info mt-1">Import Barang</button>
             <a class="btn btn-sm btn-primary mt-1" href="{{ url('barang/create') }}">Tambah</a>
             <button onclick="modalAction('{{ url('barang/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
         </div>
@@ -64,6 +65,7 @@ function modalAction(url = '') {
 var dataBarang;
 $(document).ready(function() {
     dataBarang = $('#table_barang').DataTable({
+        processing: true,
         serverSide: true,
         ajax: {
             url: "{{ url('barang/list') }}",
@@ -73,46 +75,52 @@ $(document).ready(function() {
                 d.kategori_id = $('#kategori_id').val();
             }
         },
-        columns: [
-            {
+        columns: [{
                 data: "DT_RowIndex",
                 className: "text-center",
+                width: "5%",
                 orderable: false,
                 searchable: false
-            },
-            {
+            },{
                 data: "barang_kode",
                 className: "",
+                width: "10%",
                 orderable: true,
                 searchable: true
-            },
-            {
+            },{
                 data: "barang_nama",
                 className: "",
+                width: "37%",
                 orderable: true,
-                searchable: true
-            },
-            {
+                searchable: true,
+            },{
                 data: "kategori.kategori_nama",
                 className: "",
-                orderable: false,
+                width: "14%",
+                orderable: true,
                 searchable: false
-            },
-            {
+            },{
                 data: "harga_beli",
                 className: "",
+                width: "10%",
                 orderable: true,
-                searchable: true
-            },
-            {
+                searchable: false,
+                render: function(data, type, row){
+                    return new Intl.NumberFormat('id-ID').format(data);
+                }
+            },{
                 data: "harga_jual",
                 className: "",
+                width: "10%",
                 orderable: true,
-                searchable: true
-            },
-            {
+                searchable: false,
+                render: function(data, type, row){
+                    return new Intl.NumberFormat('id-ID').format(data);
+                }
+            },{
                 data: "aksi",
-                className: "",
+                className: "text-center",
+                width: "14%",
                 orderable: false,
                 searchable: false
             }

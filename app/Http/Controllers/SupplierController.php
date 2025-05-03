@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\SupplierModel;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class SupplierController extends Controller
 {
@@ -233,6 +234,55 @@ class SupplierController extends Controller
         }
 
         return redirect('/');
+    }
+
+    public function import()
+    {
+        return view('supplier.import');
+    }
+
+    public function import_ajax(Request $request)
+    {
+        $rules = [
+            'file_supplier' => ['required', 'mimes:xlsx,xls', 'max:1024'],
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi Gagal',
+                'msgField' => $validator->errors(),
+            ]);
+        }
+
+        $file = $request->file('file_supplier');
+        $spreadsheet = IOFactory::load($file->getRealPath());
+        $sheet = $spreadsheet->getActiveSheet();
+        $rows = $sheet->toArray();
+
+        $insert = [];
+        $header = array_shift($rows); // Ambil header
+
+        foreach ($rows as $row) {
+            if (!empty($row[0])) {
+                $insert[] = [
+                    'supplier_kode' => $row[0],
+                    'supplier_nama' => $row[1],
+                    'supplier_alamat' => $row[2],
+                ];
+            }
+        }
+
+        if (!empty($insert)) {
+            SupplierModel::insertOrIgnore($insert);
+
+            return redirect('/supplier')->with('success', 'Data supplier berhasil diimport: ' . count($insert) . ' record');
+
+        } else {
+            return redirect('/supplier')->with('error', 'Data supplier gagal diimport');
+        }
     }
 
     public function confirm_ajax(string $id)
