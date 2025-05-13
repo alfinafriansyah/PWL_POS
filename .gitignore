@@ -18,6 +18,5 @@ yarn-error.log
 /.idea
 /.vscode
 
-# Excel temporary files
-~$*
+/public/~$*
 *.tmp
