@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BarangController extends Controller
 {
@@ -396,5 +397,17 @@ class BarangController extends Controller
             }
         }
         return redirect('/');
+    }
+
+    public function export_pdf()
+    {
+        $barang = BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')->orderBy('kategori_id')->orderBy('barang_kode')->with('kategori')->get();
+
+        $pdf = Pdf::loadView('barang.export_pdf', ['barang' => $barang]);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->setOption("isRemoteEnabled", true);
+        $pdf->render();
+
+        return $pdf->stream('Data Barang ' . date('D, d M Y H:i:s') . '.pdf');
     }
 }
