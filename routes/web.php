@@ -8,6 +8,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -167,6 +168,13 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/export_excel', [BarangController::class, 'export_excel']);
             // Export PDF
             Route::get('/export_pdf', [BarangController::class, 'export_pdf']);
+        });
+    });
+
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
+        Route::group(['prefix' => 'profile'], function () {
+            Route::get('/', [ProfileController::class, 'index']);
+            Route::post('/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
         });
     });
 });

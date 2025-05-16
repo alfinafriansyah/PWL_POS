@@ -68,6 +68,15 @@
                     <p>Transaksi Penjualan</p>
                 </a>
             </li>
+
+            <li class="nav-header">Pengaturan Pengguna</li>
+            <li class="nav-item">
+                <a href="{{ url('/profile') }}" class="nav-link {{ ($activeMenu == 'profile')? 'active' : '' }} ">
+                    <i class="nav-icon far fa-list-alt"></i>
+                    <p>Profile</p>
+                </a>
+            </li>
+
             <li class="nav-item">
                 <a href="#" class="nav-link" id="logout-link">
                     <i class="nav-icon fas fa-sign-out-alt"></i>
